@@ -1,3 +1,6 @@
+using BLL.Services.Implimentations;
+using BLL.Services.Interfaces;
+
 namespace ForecastApp
 {
     public class Program
@@ -10,6 +13,15 @@ namespace ForecastApp
 
             builder.Services.AddControllers();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddHttpClient("WeatherApiClient", client =>
+            {
+                client.BaseAddress = new Uri("https://api.weatherapi.com/v1/");
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
+
+            builder.Services.AddTransient<IDailyForecastService, DailyForecastService>();
+            builder.Services.AddTransient<ILongTimeForecastService, LongTimeForecastService>();
 
             var app = builder.Build();
 
