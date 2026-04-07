@@ -7,7 +7,6 @@ namespace ForecastApp.Controllers
     public class LongTimeForecastController : BaseApiController
     {
         private readonly ILongTimeForecastService _forecastService;
-        private const string CITY = "Moscow";
 
         public LongTimeForecastController(ILongTimeForecastService forecastService)
         {
@@ -17,7 +16,7 @@ namespace ForecastApp.Controllers
         [HttpGet]
         public Task<LongTimeForecastDto> Get()
         {
-            return _forecastService.GetForecastAsync(CITY, 3);
+            return _forecastService.GetForecastAsync();
         }
     }
 }

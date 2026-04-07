@@ -12,7 +12,7 @@ namespace BLL.Services.Implimentations
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<LongTimeForecastDto> GetForecastAsync(string city, int countDays)
+        public async Task<LongTimeForecastDto> GetForecastAsync()
         {
             var client = _httpClientFactory.CreateClient("WeatherApiClient");
 

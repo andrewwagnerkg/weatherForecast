@@ -20,6 +20,8 @@ namespace ForecastApp
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
 
+
+            builder.Services.AddSingleton<SettingsService>(_ => new SettingsService(builder.Configuration));
             builder.Services.AddTransient<IDailyForecastService, DailyForecastService>();
             builder.Services.AddTransient<ILongTimeForecastService, LongTimeForecastService>();
 

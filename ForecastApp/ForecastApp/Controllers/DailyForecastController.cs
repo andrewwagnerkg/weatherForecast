@@ -7,7 +7,6 @@ namespace ForecastApp.Controllers
     public class DailyForecastController : BaseApiController
     {
         private readonly IDailyForecastService _dailyForecastService;
-        private const string CITY = "Moscow";
 
         public DailyForecastController(IDailyForecastService forecastService)
         {
@@ -17,7 +16,7 @@ namespace ForecastApp.Controllers
         [HttpGet]
         public Task<DailyForecastDto> Get()
         {
-            return _dailyForecastService.GetDailyForecastAsync(CITY);
+            return _dailyForecastService.GetDailyForecastAsync();
         }
     }
 }
