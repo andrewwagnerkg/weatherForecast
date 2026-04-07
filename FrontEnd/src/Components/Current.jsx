@@ -7,11 +7,13 @@ function Current() {
     var [feelsLike, setFeelsLike] = useState(null);
 
     var [isError, setIsError] = useState(false);
-    var [isLoaded, setIsLoaded] = useState(false);
+    var [isLoading, setIsLoading] = useState(true);
+    var [isReload, setIsReload] = useState(false);
 
     useEffect(()=>{
         setIsError(false);
-        setIsLoaded(true);
+        setIsLoading(true);
+        setIsReload(false);
         fetch("https://localhost:7215/Forecast/current")
             .then(res => {
                 return res.json()
@@ -25,12 +27,31 @@ function Current() {
             .catch(err => {
                 setIsError(true);
             })
-            .finally(() => setIsLoaded(false));
-    }, []);
+            .finally(() => setIsLoading(false));
+    }, [isReload]);
+
+    if(isLoading)
+    {
+        return (
+            <>
+                <div>Loading data...</div>
+            </>
+        )
+    }
+
+    if(isError){
+        return (
+            <>
+                <div>Error when data fetching</div>
+                <button onClick={() => setIsReload(true)}>Reload</button>
+            </>
+        )
+    }
 
     return (
         <>
             <div>Current weather</div>
+
             <p>Updated date {lastUpdated}</p>
             <p>Moscow</p>
             <div>
