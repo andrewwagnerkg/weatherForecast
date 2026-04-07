@@ -30,9 +30,12 @@ namespace ForecastApp
             app.UseSwagger();
             app.UseSwaggerUI();
 
+            app.UseStaticFiles();
+
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();
+            app.MapFallbackToFile("/index.html");
 
             app.Run();
         }
