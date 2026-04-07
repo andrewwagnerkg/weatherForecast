@@ -14,6 +14,12 @@ namespace ForecastApp
 
             builder.Services.AddControllers();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddCors(x => x.AddDefaultPolicy(prop =>
+            {
+                prop.AllowAnyHeader();
+                prop.AllowAnyMethod();
+                prop.AllowAnyOrigin(); //For test app only, not recommended for production
+            }));
 
             builder.Services.AddSingleton<SettingsService>(_ => new SettingsService(builder.Configuration));
             builder.Services.AddSingleton<APIClient>(x =>
