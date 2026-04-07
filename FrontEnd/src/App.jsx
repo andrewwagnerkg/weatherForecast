@@ -1,11 +1,16 @@
 import './App.css'
+import Current from "./Components/Current.jsx";
+import Daily from "./Components/Daily.jsx";
+import Hourly from "./Components/Hourly.jsx";
 
 function App() {
 
 
   return (
     <>
-      <div>Test weather forecast</div>
+        <Current/>
+        <Hourly/>
+        <Daily/>
     </>
   )
 }
