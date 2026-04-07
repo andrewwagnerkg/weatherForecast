@@ -1,5 +1,6 @@
 using BLL.Services.Implimentations;
 using BLL.Services.Interfaces;
+using WeatherAPI_CSharp;
 
 namespace ForecastApp
 {
@@ -14,16 +15,13 @@ namespace ForecastApp
             builder.Services.AddControllers();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddHttpClient("WeatherApiClient", client =>
-            {
-                client.BaseAddress = new Uri("https://api.weatherapi.com/v1/");
-                client.DefaultRequestHeaders.Add("Accept", "application/json");
-            });
-
-
             builder.Services.AddSingleton<SettingsService>(_ => new SettingsService(builder.Configuration));
-            builder.Services.AddTransient<IDailyForecastService, DailyForecastService>();
-            builder.Services.AddTransient<ILongTimeForecastService, LongTimeForecastService>();
+            builder.Services.AddSingleton<APIClient>(x =>
+            {
+                var settings = x.GetRequiredService<SettingsService>();
+                return new APIClient(settings.GetApiKey());
+            });
+            builder.Services.AddTransient<IForecastService, ForecastService>();
 
             var app = builder.Build();
 
