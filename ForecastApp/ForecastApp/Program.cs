@@ -12,14 +12,21 @@ namespace ForecastApp
 
             // Add services to the container.
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: "CORS",
+                    policy =>
+                    {
+                        policy.AllowAnyOrigin() //Not recomended in production, but for testing purposes it's fine
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
+
+
             builder.Services.AddControllers();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddCors(x => x.AddDefaultPolicy(prop =>
-            {
-                prop.AllowAnyHeader();
-                prop.AllowAnyMethod();
-                prop.AllowAnyOrigin(); //For test app only, not recommended for production
-            }));
+
 
             builder.Services.AddSingleton<SettingsService>(_ => new SettingsService(builder.Configuration));
             builder.Services.AddSingleton<APIClient>(x =>
@@ -36,8 +43,8 @@ namespace ForecastApp
             app.UseSwagger();
             app.UseSwaggerUI();
 
+            app.UseCors("CORS");
             app.UseHttpsRedirection();
-            app.UseAuthorization();
             app.MapControllers();
 
             app.Run();
