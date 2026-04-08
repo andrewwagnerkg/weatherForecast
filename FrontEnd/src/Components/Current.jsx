@@ -5,6 +5,8 @@ function Current() {
     var [weather, setWeather] = useState(null);
     var [lastUpdated, setLastUpdated] = useState(null);
     var [feelsLike, setFeelsLike] = useState(null);
+    var [imageUrl, setImageUrl] = useState(null);
+    var [conditionText, setConditionText] = useState(null);
 
     var [isError, setIsError] = useState(false);
     var [isLoading, setIsLoading] = useState(true);
@@ -23,6 +25,8 @@ function Current() {
                 setWeather(data.temperatureCelsius);
                 setLastUpdated(data.lastUpdated);
                 setFeelsLike(data.feelsLikeCelsius)
+                setImageUrl(data.conditionIconUrl)
+                setConditionText(data.conditionText);
             })
             .catch(err => {
                 setIsError(true);
@@ -57,7 +61,7 @@ function Current() {
             <div>
                 <h1>{weather} &deg;C</h1>
                 <p>Feels like {feelsLike} &deg;C</p>
-                <p><img src="//cdn.weatherapi.com/weather/64x64/day/116.png"/> Partly cloudy</p>
+                <p><img src={imageUrl}/> {conditionText}</p>
             </div>
         </>
     )
