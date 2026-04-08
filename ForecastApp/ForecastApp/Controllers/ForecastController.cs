@@ -7,19 +7,25 @@ namespace ForecastApp.Controllers
     public class ForecastController(IForecastService forecastService) : BaseApiController
     {
         [HttpGet("daily")]
-        public Task<DailyLookupDto> GetDaily()
-            => forecastService.GetDailyForecastAsync();
+        public async Task<DailyLookupDto> GetDaily()
+            => (await forecastService.GetCashedForecastAsync()).Daily;
 
         [HttpGet("current")]
-        public Task<CurrentLookupDto> GetCurrent()
+        public async Task<CurrentLookupDto> GetCurrent()
         {
-            return forecastService.GetCurrentForecastAsync();
+            return (await forecastService.GetCashedForecastAsync()).Current;
         }
 
         [HttpGet("hourly")]
-        public Task<HourlyLookupDto> GetHourly()
+        public async Task<HourlyLookupDto> GetHourly()
         {
-            return forecastService.GetHourlyForecastAsync();
+            return (await forecastService.GetCashedForecastAsync()).Hourly;
+        }
+
+        [HttpGet("common")]
+        public async Task<ForecastDto> GetCommonForecast()
+        {
+            return await forecastService.GetCashedForecastAsync();
         }
     }
 }

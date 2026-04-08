@@ -1,5 +1,7 @@
 using BLL.Services.Implimentations;
 using BLL.Services.Interfaces;
+using DAL;
+using Microsoft.EntityFrameworkCore;
 using WeatherAPI_CSharp;
 
 namespace ForecastApp
@@ -11,6 +13,9 @@ namespace ForecastApp
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            builder.Services.AddDbContext<ApplicationDataContext>(options =>
+                options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddCors(options =>
             {
@@ -34,6 +39,9 @@ namespace ForecastApp
                 var settings = x.GetRequiredService<SettingsService>();
                 return new APIClient(settings.GetApiKey());
             });
+
+            builder.Services.AddTransient<ApplicationDataContext>();
+            builder.Services.AddTransient<ICashService, CashService>();
             builder.Services.AddTransient<IForecastService, ForecastService>();
 
             var app = builder.Build();

@@ -13,12 +13,12 @@ namespace BLL.Services.Implimentations
 
         public string GetApiKey()
         {
-            return _configurationManager.GetValue<string>("WeatherApiKey");
+            return _configurationManager.GetValue<string>("WeatherApiKey") ?? "";
         }
 
         public string GetCity()
         {
-            return _configurationManager.GetValue<string>("WeatherApiCity");
+            return _configurationManager.GetValue<string>("WeatherApiCity") ?? "Moscow";
         }
 
         public string GetDays()
@@ -26,8 +26,8 @@ namespace BLL.Services.Implimentations
             return _configurationManager.GetValue<int>("ForecastDaysCount").ToString();
         }
 
-        public string GetCurrentQueryString() => $"current.json?key={GetApiKey()}&q={GetCity()}";
+        public string GetTimeZone() => "Russian Standard Time";
 
-        public string GetForecastQueryString() => $"forecast.json?key={GetApiKey()}&q={GetCity()}&days={GetDays()}";
+        public int GetHoursCount() => 48;
     }
 }

@@ -7,5 +7,6 @@ namespace BLL.Services.Interfaces
         Task<DailyLookupDto> GetDailyForecastAsync();
         Task<CurrentLookupDto> GetCurrentForecastAsync();
         Task<HourlyLookupDto> GetHourlyForecastAsync();
+        Task<ForecastDto> GetCashedForecastAsync();
     }
 }

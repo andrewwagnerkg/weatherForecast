@@ -4,7 +4,7 @@ using WeatherAPI_CSharp;
 
 namespace BLL.Services.Implimentations
 {
-    public class ForecastService(SettingsService settingsService, APIClient weatherClient) : IForecastService
+    public class ForecastService(SettingsService settingsService, APIClient weatherClient, ICashService cashService) : IForecastService
     {
         public async Task<DailyLookupDto> GetDailyForecastAsync()
         {
@@ -65,8 +65,8 @@ namespace BLL.Services.Implimentations
         {
             try
             {
-                var hourly = (await weatherClient.GetWeatherForecastHourlyAsync(settingsService.GetCity(), 48))
-                    .Where(x => x.Date >= DateTime.Now)
+                var hourly = (await weatherClient.GetWeatherForecastHourlyAsync(settingsService.GetCity(), settingsService.GetHoursCount()))
+                    .Where(x => x.Date >= TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, settingsService.GetTimeZone()))
                     .Select(x => new HourDto
                     {
                         Date = x.Date,
@@ -86,6 +86,35 @@ namespace BLL.Services.Implimentations
                 return HourlyLookupDto.Error(e.Message);
             }
 
+        }
+
+        public async Task<ForecastDto> GetCashedForecastAsync()
+        {
+
+            try
+            {
+                var current = await GetCurrentForecastAsync();
+                var hasCash = await cashService.HasCashRecordByLastDateUpdateAsync(current.LastUpdated);
+                if (!hasCash)
+                {
+                    await cashService.AddCashRecordAsync(new ForecastDto
+                    {
+                        Current = current,
+                        Hourly = await GetHourlyForecastAsync(),
+                        Daily = await GetDailyForecastAsync()
+                    });
+                }
+
+                var cashed = await cashService.GetForecastDtoByLastDateUpdateAsync(current.LastUpdated);
+                return cashed;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                ;
+            }
+
+            return new ForecastDto();
         }
     }
 }
