@@ -55,6 +55,12 @@ namespace ForecastApp
             app.UseHttpsRedirection();
             app.MapControllers();
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDataContext>();
+                dbContext.Database.Migrate();
+            }
+
             app.Run();
         }
     }
