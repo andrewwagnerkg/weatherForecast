@@ -113,7 +113,6 @@ namespace BLL.Services.Implimentations
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                ;
             }
 
             return new ForecastDto();

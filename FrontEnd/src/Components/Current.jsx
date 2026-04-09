@@ -2,7 +2,6 @@ function Current(props) {
 
     console.log(props);
     return (
-        <>
             <section className="card" aria-label="Текущая погода">
                 <div className="current-top">
                     <div>
@@ -35,7 +34,6 @@ function Current(props) {
                 {/*    </div>*/}
                 {/*</div>*/}
             </section>
-        </>
     )
 }
 

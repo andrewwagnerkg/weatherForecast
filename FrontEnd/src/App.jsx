@@ -3,6 +3,9 @@ import Current from "./Components/Current.jsx";
 import Daily from "./Components/Daily.jsx";
 import Hourly from "./Components/Hourly.jsx";
 import {useEffect, useState} from "react";
+import {ForecastUrl} from "./Constants.js";
+import Loader from "./Components/Loader.jsx";
+import ErrorComponent from "./Components/ErrorComponent.jsx";
 
 function App() {
 
@@ -18,7 +21,8 @@ function App() {
         setIsError(false);
         setIsLoading(true);
         setIsReload(false);
-        fetch("https://localhost:32781/Forecast/common")
+        console.log(ForecastUrl)
+        fetch(ForecastUrl)
             .then(res => {
                 return res.json()
             })
@@ -38,18 +42,16 @@ function App() {
     if(isLoading)
     {
         return (
-            <>
-                <div>Loading data...</div>
-            </>
+            <Loader/>
         )
     }
 
     if(isError){
         return (
-            <>
-                <div>Error when data fetching</div>
-                <button onClick={() => setIsReload(true)}>Reload</button>
-            </>
+            <ErrorComponent
+                text="Error when data fetching"
+                buttonText="Reload"
+                onPress={() => setIsReload(false)} />
         )
     }
 
