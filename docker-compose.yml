@@ -1,0 +1,44 @@
+services:
+  backend:
+    build:
+      context: ./ForecastApp
+      dockerfile: ForecastApp/Dockerfile
+    container_name: forecast-backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=
+      - DOTNET_RUNNING_IN_CONTAINER=true
+      # Override connection string so SQLite db is stored in volume
+      - ConnectionStrings__DefaultConnection=Data Source=/app/data/app.db
+      - WeatherApiKey=fa8b3df74d4042b9aa7135114252304
+      - WeatherApiCity=Moscow
+      - ForecastDaysCount=3
+    volumes:
+      - backend-data:/app/data
+    networks:
+      - weather-net
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./FrontEnd
+      dockerfile: Dockerfile
+      args:
+        # Frontend talks to backend via nginx proxy on /api/ path
+        VITE_API_URL: http://localhost/api
+    container_name: forecast-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - weather-net
+    restart: unless-stopped
+
+networks:
+  weather-net:
+    driver: bridge
+
+volumes:
+  backend-data:
