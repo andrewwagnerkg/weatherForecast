@@ -1,68 +1,40 @@
-import {useEffect, useState} from "react";
+function Current(props) {
 
-function Current() {
-
-    var [weather, setWeather] = useState(null);
-    var [lastUpdated, setLastUpdated] = useState(null);
-    var [feelsLike, setFeelsLike] = useState(null);
-    var [imageUrl, setImageUrl] = useState(null);
-    var [conditionText, setConditionText] = useState(null);
-
-    var [isError, setIsError] = useState(false);
-    var [isLoading, setIsLoading] = useState(true);
-    var [isReload, setIsReload] = useState(false);
-
-    useEffect(()=>{
-        setIsError(false);
-        setIsLoading(true);
-        setIsReload(false);
-        fetch("https://localhost:7215/Forecast/current")
-            .then(res => {
-                return res.json()
-            })
-            .then(data => {
-                console.log(data);
-                setWeather(data.temperatureCelsius);
-                setLastUpdated(data.lastUpdated);
-                setFeelsLike(data.feelsLikeCelsius)
-                setImageUrl(data.conditionIconUrl)
-                setConditionText(data.conditionText);
-            })
-            .catch(err => {
-                setIsError(true);
-            })
-            .finally(() => setIsLoading(false));
-    }, [isReload]);
-
-    if(isLoading)
-    {
-        return (
-            <>
-                <div>Loading data...</div>
-            </>
-        )
-    }
-
-    if(isError){
-        return (
-            <>
-                <div>Error when data fetching</div>
-                <button onClick={() => setIsReload(true)}>Reload</button>
-            </>
-        )
-    }
-
+    console.log(props);
     return (
         <>
-            <div>Current weather</div>
+            <section className="card" aria-label="Текущая погода">
+                <div className="current-top">
+                    <div>
+                        <div className="city-name">{props.city}</div>
+                        <div className="city-country">{props.lastUpdated}</div>
+                    </div>
+                    <img className="weather-icon-lg" src={props.conditionIconUrl} />
+                </div>
 
-            <p>Updated date {lastUpdated}</p>
-            <p>Moscow</p>
-            <div>
-                <h1>{weather} &deg;C</h1>
-                <p>Feels like {feelsLike} &deg;C</p>
-                <p><img src={imageUrl}/> {conditionText}</p>
-            </div>
+                <div className="temp-row">
+                    <span className="temp-main">{props.temperatureCelsius}</span>
+                    <span className="temp-unit">°C</span>
+                    <span className="feels-like">ощущается как {props.feelsLikeCelsius} &deg;C</span>
+                </div>
+
+                <div className="weather-desc">{props.conditionText}</div>
+
+                {/*<div className="stats-row">*/}
+                {/*    <div className="stat-item">*/}
+                {/*        <div className="stat-label">Влажность</div>*/}
+                {/*        <div className="stat-value">52%</div>*/}
+                {/*    </div>*/}
+                {/*    <div className="stat-item">*/}
+                {/*        <div className="stat-label">Ветер</div>*/}
+                {/*        <div className="stat-value">14 км/ч</div>*/}
+                {/*    </div>*/}
+                {/*    <div className="stat-item">*/}
+                {/*        <div className="stat-label">УФ-индекс</div>*/}
+                {/*        <div className="stat-value">5</div>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
+            </section>
         </>
     )
 }
