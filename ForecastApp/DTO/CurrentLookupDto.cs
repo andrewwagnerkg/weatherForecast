@@ -8,6 +8,7 @@
             Message = errorMessage
         };
 
+        public string City { get; set; }
         public string LastUpdated { get; set; }
         public double TemperatureCelsius { get; set; }
         public double FeelsLikeCelsius { get; set; }
