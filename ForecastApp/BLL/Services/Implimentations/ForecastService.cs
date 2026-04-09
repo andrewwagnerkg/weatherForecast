@@ -37,10 +37,12 @@ namespace BLL.Services.Implimentations
         {
             try
             {
-                var current = await weatherClient.GetWeatherCurrentAsync(settingsService.GetCity());
+                var cityName = settingsService.GetCity();
+                var current = await weatherClient.GetWeatherCurrentAsync(cityName);
 
                 return new CurrentLookupDto
                 {
+                    City = cityName,
                     Status = 200,
                     Message = "Ok",
                     ConditionIconUrl = current.ConditionIconUrl,
